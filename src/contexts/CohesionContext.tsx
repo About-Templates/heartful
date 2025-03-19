@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -28,6 +27,9 @@ type CohesionContextType = {
   getCurrentStreak: (cohesionId: string) => number;
   getLongestStreak: (cohesionId: string) => number;
   getCompletionRate: (cohesionId: string) => number;
+  getCohesionById: (id: string) => CohesionType | undefined;
+  getCompletionHistory: (cohesionId: string) => { date: string; completed: boolean }[];
+  markCompleted: (cohesionId: string) => void;
 };
 
 const CohesionContext = createContext<CohesionContextType | undefined>(undefined);
@@ -60,7 +62,6 @@ export function CohesionProvider({ children }: { children: React.ReactNode }) {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Load cohesions from localStorage
     const storedCohesions = localStorage.getItem("hug-mind-self-cohesion");
     if (storedCohesions) {
       setCohesions(JSON.parse(storedCohesions));
@@ -70,7 +71,6 @@ export function CohesionProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  // Save cohesions to localStorage whenever they change
   useEffect(() => {
     if (cohesions.length > 0) {
       localStorage.setItem("hug-mind-self-cohesion", JSON.stringify(cohesions));
@@ -138,14 +138,12 @@ export function CohesionProvider({ children }: { children: React.ReactNode }) {
     const cohesion = cohesions.find(c => c.id === cohesionId);
     if (!cohesion) return 0;
     
-    // Sort days by date
     const sortedDays = [...cohesion.days]
       .filter(day => day.completed)
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     
     if (sortedDays.length === 0) return 0;
     
-    // Check if the most recent day is today or yesterday
     const mostRecentDate = new Date(sortedDays[0].date);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -157,13 +155,11 @@ export function CohesionProvider({ children }: { children: React.ReactNode }) {
       return 0;
     }
     
-    // Count consecutive days
     let streak = 1;
     for (let i = 0; i < sortedDays.length - 1; i++) {
       const currentDate = new Date(sortedDays[i].date);
       const previousDate = new Date(sortedDays[i + 1].date);
       
-      // Calculate difference in days
       const diffTime = currentDate.getTime() - previousDate.getTime();
       const diffDays = diffTime / (1000 * 60 * 60 * 24);
       
@@ -181,7 +177,6 @@ export function CohesionProvider({ children }: { children: React.ReactNode }) {
     const cohesion = cohesions.find(c => c.id === cohesionId);
     if (!cohesion) return 0;
     
-    // Sort days by date
     const sortedDays = [...cohesion.days]
       .filter(day => day.completed)
       .map(day => day.date)
@@ -196,7 +191,6 @@ export function CohesionProvider({ children }: { children: React.ReactNode }) {
       const currentDate = new Date(sortedDays[i]);
       const previousDate = new Date(sortedDays[i - 1]);
       
-      // Calculate difference in days
       const diffTime = currentDate.getTime() - previousDate.getTime();
       const diffDays = diffTime / (1000 * 60 * 60 * 24);
       
@@ -221,6 +215,26 @@ export function CohesionProvider({ children }: { children: React.ReactNode }) {
     return totalDays > 0 ? Math.round((completedDays / totalDays) * 100) : 0;
   };
 
+  const getCohesionById = (id: string): CohesionType | undefined => {
+    return cohesions.find(c => c.id === id);
+  };
+
+  const getCompletionHistory = (cohesionId: string) => {
+    const cohesion = cohesions.find(c => c.id === cohesionId);
+    if (!cohesion) return [];
+    return cohesion.days.map(day => ({ date: day.date, completed: day.completed }));
+  };
+
+  const markCompleted = (cohesionId: string) => {
+    const today = new Date().toISOString().split('T')[0];
+    markDay(cohesionId, today, true);
+    
+    toast({
+      title: "ทำสำเร็จแล้ว!",
+      description: "บันทึกความสำเร็จของวันนี้เรียบร้อยแล้ว",
+    });
+  };
+
   return (
     <CohesionContext.Provider
       value={{
@@ -232,6 +246,9 @@ export function CohesionProvider({ children }: { children: React.ReactNode }) {
         getCurrentStreak,
         getLongestStreak,
         getCompletionRate,
+        getCohesionById,
+        getCompletionHistory,
+        markCompleted,
       }}
     >
       {children}
