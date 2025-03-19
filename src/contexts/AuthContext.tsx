@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -8,6 +7,7 @@ type User = {
   email: string;
   name: string;
   createdAt: string;
+  isAdmin?: boolean;
 };
 
 type AuthContextType = {
@@ -19,6 +19,7 @@ type AuthContextType = {
   forgotPassword: (email: string) => Promise<void>;
   resetPassword: (token: string, password: string) => Promise<void>;
   updateProfile: (data: { name?: string, email?: string }) => Promise<void>;
+  isAdmin: boolean;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -38,6 +39,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(false);
   }, []);
 
+  const isAdmin = user?.isAdmin || false;
+
   const signIn = async (email: string, password: string) => {
     setIsLoading(true);
     try {
@@ -46,11 +49,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       
       // Mock authentication - in a real app, you would validate with a backend
       if (email && password) {
+        // For demo purposes, make specific email addresses admin users
+        const isAdmin = email === "admin@example.com" || email.includes("admin");
+        
         const mockUser = {
           id: `user-${Date.now()}`,
           email,
           name: email.split('@')[0],
-          createdAt: new Date().toISOString()
+          createdAt: new Date().toISOString(),
+          isAdmin
         };
         
         // Store user in localStorage
@@ -89,7 +96,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           id: `user-${Date.now()}`,
           email,
           name,
-          createdAt: new Date().toISOString()
+          createdAt: new Date().toISOString(),
+          isAdmin: false
         };
         
         // Store user in localStorage
@@ -217,6 +225,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         forgotPassword,
         resetPassword,
         updateProfile,
+        isAdmin,
       }}
     >
       {children}
