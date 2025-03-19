@@ -7,6 +7,7 @@ type User = {
   id: string;
   email: string;
   name: string;
+  createdAt: string;
 };
 
 type AuthContextType = {
@@ -17,6 +18,7 @@ type AuthContextType = {
   signOut: () => void;
   forgotPassword: (email: string) => Promise<void>;
   resetPassword: (token: string, password: string) => Promise<void>;
+  updateProfile: (data: { name?: string, email?: string }) => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -47,7 +49,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const mockUser = {
           id: `user-${Date.now()}`,
           email,
-          name: email.split('@')[0]
+          name: email.split('@')[0],
+          createdAt: new Date().toISOString()
         };
         
         // Store user in localStorage
@@ -85,7 +88,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const mockUser = {
           id: `user-${Date.now()}`,
           email,
-          name
+          name,
+          createdAt: new Date().toISOString()
         };
         
         // Store user in localStorage
@@ -170,6 +174,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const updateProfile = async (data: { name?: string; email?: string }) => {
+    setIsLoading(true);
+    try {
+      // Simulating API call with a delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      if (user) {
+        const updatedUser = { ...user, ...data };
+        
+        // Update in localStorage
+        localStorage.setItem("hug-mind-self-user", JSON.stringify(updatedUser));
+        setUser(updatedUser);
+        
+        toast({
+          title: "อัปเดตโปรไฟล์สำเร็จ",
+          description: "ข้อมูลของคุณได้รับการอัปเดตเรียบร้อยแล้ว",
+        });
+      } else {
+        throw new Error("ไม่พบข้อมูลผู้ใช้");
+      }
+    } catch (error) {
+      toast({
+        title: "อัปเดตโปรไฟล์ล้มเหลว",
+        description: error instanceof Error ? error.message : "เกิดข้อผิดพลาด โปรดลองอีกครั้ง",
+        variant: "destructive",
+      });
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -180,6 +216,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         signOut,
         forgotPassword,
         resetPassword,
+        updateProfile,
       }}
     >
       {children}

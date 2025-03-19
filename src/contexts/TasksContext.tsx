@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -17,6 +16,7 @@ type TasksContextType = {
   addTask: (task: Omit<TaskType, "id" | "createdAt" | "completed">) => void;
   updateTask: (id: string, task: Partial<TaskType>) => void;
   deleteTask: (id: string) => void;
+  toggleTask: (id: string) => void;
   toggleComplete: (id: string) => void;
 };
 
@@ -101,7 +101,7 @@ export function TasksProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
-  const toggleComplete = (id: string) => {
+  const toggleTask = (id: string) => {
     setTasks(prev => 
       prev.map(t => {
         if (t.id === id) {
@@ -117,6 +117,9 @@ export function TasksProvider({ children }: { children: React.ReactNode }) {
     );
   };
 
+  // Keep this for backward compatibility
+  const toggleComplete = toggleTask;
+
   return (
     <TasksContext.Provider
       value={{
@@ -124,6 +127,7 @@ export function TasksProvider({ children }: { children: React.ReactNode }) {
         addTask,
         updateTask,
         deleteTask,
+        toggleTask,
         toggleComplete,
       }}
     >
