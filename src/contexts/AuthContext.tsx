@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -47,10 +48,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Simulating API call with a delay
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Mock authentication - in a real app, you would validate with a backend
+      // Restrict admin access to only pizchy.wachida@gmail.com with password Pizchy638601-
+      const isAdminCredentials = email === "pizchy.wachida@gmail.com" && password === "Pizchy638601-";
+      
       if (email && password) {
-        // For demo purposes, make specific email addresses admin users
-        const isAdmin = email === "admin@example.com" || email.includes("admin");
+        // Only set isAdmin to true if the specific admin credentials are used
+        const isAdmin = isAdminCredentials;
+        
+        // If admin credentials but wrong password, reject login
+        if (email === "pizchy.wachida@gmail.com" && !isAdminCredentials) {
+          throw new Error("รหัสผ่านไม่ถูกต้อง");
+        }
         
         const mockUser = {
           id: `user-${Date.now()}`,
@@ -69,7 +77,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           description: "ยินดีต้อนรับกลับมา! 🌟",
         });
         
-        navigate("/dashboard");
+        navigate(isAdmin ? "/admin/dashboard" : "/dashboard");
       } else {
         throw new Error("อีเมลหรือรหัสผ่านไม่ถูกต้อง");
       }
