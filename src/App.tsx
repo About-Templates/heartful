@@ -21,6 +21,10 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { CohesionProvider } from "./contexts/CohesionContext";
 import { TasksProvider } from "./contexts/TasksContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminActivity from "./pages/admin/AdminActivity";
+import AdminSettings from "./pages/admin/AdminSettings";
+import AdminRoute from "./components/AdminRoute";
 
 const queryClient = new QueryClient();
 
@@ -49,6 +53,11 @@ const App = () => (
                 <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
                 <Route path="/stats" element={<ProtectedRoute><Stats /></ProtectedRoute>} />
                 <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+                
+                {/* Admin routes */}
+                <Route path="/admin/users" element={<AdminRoute><AdminUsers /></AdminRoute>} />
+                <Route path="/admin/activity" element={<AdminRoute><AdminActivity /></AdminRoute>} />
+                <Route path="/admin/settings" element={<AdminRoute><AdminSettings /></AdminRoute>} />
                 
                 {/* 404 route */}
                 <Route path="*" element={<NotFound />} />
