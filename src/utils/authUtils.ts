@@ -20,7 +20,7 @@ export const removeUser = (): void => {
 };
 
 export const isValidAdmin = (email: string, password: string): boolean => {
-  return email === "pizchy.wachida@gmail.com" && password === "Pizchy638601-";
+  return email === "pizchy.wachida@gmail.com" && password === "Pizchy638601";
 };
 
 export const createMockUser = (email: string, name: string, isAdmin: boolean): User => {

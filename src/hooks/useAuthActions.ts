@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -22,14 +21,14 @@ export const useAuthActions = (setUser: React.Dispatch<React.SetStateAction<User
       // Simulating API call with a delay
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Restrict admin access to only pizchy.wachida@gmail.com with password Pizchy638601-
+      // Check if credentials are for admin
       const isAdminCredentials = isValidAdmin(email, password);
       
       if (email && password) {
         // Only set isAdmin to true if the specific admin credentials are used
         const isAdmin = isAdminCredentials;
         
-        // If admin credentials but wrong password, reject login
+        // If admin email but wrong password, reject login
         if (email === "pizchy.wachida@gmail.com" && !isAdminCredentials) {
           throw new Error("รหัสผ่านไม่ถูกต้อง");
         }
@@ -42,7 +41,7 @@ export const useAuthActions = (setUser: React.Dispatch<React.SetStateAction<User
         
         showAuthToast("success", "login");
         
-        navigate(isAdmin ? "/admin/dashboard" : "/dashboard");
+        navigate(isAdmin ? "/admin/users" : "/dashboard");
       } else {
         throw new Error("อีเมลหรือรหัสผ่านไม่ถูกต้อง");
       }
@@ -107,7 +106,7 @@ export const useAuthActions = (setUser: React.Dispatch<React.SetStateAction<User
     } catch (error) {
       toast({
         title: "ส่งอีเมลรีเซ็ตรหัสผ่านล้มเหลว",
-        description: error instanceof Error ? error.message : "เกิดข้อผิดพลาด โปรดลองอีกครั้ง",
+        description: error instanceof Error ? error.message : "เกิดข้อผิดพล���ด โปรดลองอีกครั้ง",
         variant: "destructive",
       });
     } finally {
