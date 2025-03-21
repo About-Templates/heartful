@@ -1,56 +1,42 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { AuthContextType, User } from "@/types/auth";
-import { useAuthActions } from "@/hooks/useAuthActions";
+import { User } from "@/types/auth";
 import { getStoredUser } from "@/utils/authUtils";
+
+type AuthContextType = {
+  user: User | null;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+  isLoading: boolean;
+  isAdmin: boolean;
+};
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+};
+
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const {
-    isLoading,
-    signIn,
-    signUp,
-    signOut,
-    forgotPassword,
-    resetPassword,
-    updateProfile
-  } = useAuthActions(setUser);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check for stored user in localStorage
     const storedUser = getStoredUser();
     if (storedUser) {
       setUser(storedUser);
     }
+    setIsLoading(false);
   }, []);
 
   const isAdmin = user?.isAdmin || false;
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        isLoading,
-        signIn,
-        signUp,
-        signOut,
-        forgotPassword,
-        resetPassword,
-        updateProfile,
-        isAdmin,
-      }}
-    >
+    <AuthContext.Provider value={{ user, setUser, isLoading, isAdmin }}>
       {children}
     </AuthContext.Provider>
   );
-}
-
-export function useAuth() {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
-}
+};

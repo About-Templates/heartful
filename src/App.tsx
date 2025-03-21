@@ -33,12 +33,12 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider defaultTheme="light">
       <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <AuthProvider>
+        <AuthProvider>
+          <BrowserRouter>
             <CohesionProvider>
               <TasksProvider>
+                <Toaster />
+                <Sonner />
                 <Routes>
                   {/* Public routes */}
                   <Route path="/" element={<Index />} />
@@ -66,8 +66,8 @@ const App = () => (
                 </Routes>
               </TasksProvider>
             </CohesionProvider>
-          </AuthProvider>
-        </BrowserRouter>
+          </BrowserRouter>
+        </AuthProvider>
       </TooltipProvider>
     </ThemeProvider>
   </QueryClientProvider>
