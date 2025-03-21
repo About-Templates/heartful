@@ -33,8 +33,8 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider defaultTheme="light">
       <TooltipProvider>
-        <AuthProvider>
-          <BrowserRouter>
+        <BrowserRouter>
+          <AuthProvider>
             <CohesionProvider>
               <TasksProvider>
                 <Toaster />
@@ -66,8 +66,8 @@ const App = () => (
                 </Routes>
               </TasksProvider>
             </CohesionProvider>
-          </BrowserRouter>
-        </AuthProvider>
+          </AuthProvider>
+        </BrowserRouter>
       </TooltipProvider>
     </ThemeProvider>
   </QueryClientProvider>
