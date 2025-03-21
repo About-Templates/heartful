@@ -25,48 +25,51 @@ import AdminUsers from "./pages/admin/AdminUsers";
 import AdminActivity from "./pages/admin/AdminActivity";
 import AdminSettings from "./pages/admin/AdminSettings";
 import AdminRoute from "./components/AdminRoute";
+import { ThemeProvider } from "./providers/ThemeProvider";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <AuthProvider>
-          <CohesionProvider>
-            <TasksProvider>
-              <Routes>
-                {/* Public routes */}
-                <Route path="/" element={<Index />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<SignUp />} />
-                <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route path="/reset-password" element={<ResetPassword />} />
-                
-                {/* Protected routes */}
-                <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-                <Route path="/cohesion" element={<ProtectedRoute><Cohesion /></ProtectedRoute>} />
-                <Route path="/cohesion/:id" element={<ProtectedRoute><CohesionDetail /></ProtectedRoute>} />
-                <Route path="/tasks" element={<ProtectedRoute><Tasks /></ProtectedRoute>} />
-                <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-                <Route path="/stats" element={<ProtectedRoute><Stats /></ProtectedRoute>} />
-                <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-                
-                {/* Admin routes */}
-                <Route path="/admin/users" element={<AdminRoute><AdminUsers /></AdminRoute>} />
-                <Route path="/admin/activity" element={<AdminRoute><AdminActivity /></AdminRoute>} />
-                <Route path="/admin/settings" element={<AdminRoute><AdminSettings /></AdminRoute>} />
-                
-                {/* 404 route */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </TasksProvider>
-          </CohesionProvider>
-        </AuthProvider>
-      </BrowserRouter>
-    </TooltipProvider>
+    <ThemeProvider defaultTheme="light">
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <AuthProvider>
+            <CohesionProvider>
+              <TasksProvider>
+                <Routes>
+                  {/* Public routes */}
+                  <Route path="/" element={<Index />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/signup" element={<SignUp />} />
+                  <Route path="/forgot-password" element={<ForgotPassword />} />
+                  <Route path="/reset-password" element={<ResetPassword />} />
+                  
+                  {/* Protected routes */}
+                  <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                  <Route path="/cohesion" element={<ProtectedRoute><Cohesion /></ProtectedRoute>} />
+                  <Route path="/cohesion/:id" element={<ProtectedRoute><CohesionDetail /></ProtectedRoute>} />
+                  <Route path="/tasks" element={<ProtectedRoute><Tasks /></ProtectedRoute>} />
+                  <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+                  <Route path="/stats" element={<ProtectedRoute><Stats /></ProtectedRoute>} />
+                  <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+                  
+                  {/* Admin routes */}
+                  <Route path="/admin/users" element={<AdminRoute><AdminUsers /></AdminRoute>} />
+                  <Route path="/admin/activity" element={<AdminRoute><AdminActivity /></AdminRoute>} />
+                  <Route path="/admin/settings" element={<AdminRoute><AdminSettings /></AdminRoute>} />
+                  
+                  {/* 404 route */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </TasksProvider>
+            </CohesionProvider>
+          </AuthProvider>
+        </BrowserRouter>
+      </TooltipProvider>
+    </ThemeProvider>
   </QueryClientProvider>
 );
 

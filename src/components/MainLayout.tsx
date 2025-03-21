@@ -1,8 +1,10 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { 
   Home, 
   Calendar, 
@@ -11,8 +13,15 @@ import {
   BarChart2, 
   Settings,
   LogOut,
-  Shield
+  Shield,
+  Menu,
+  X
 } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -21,6 +30,8 @@ interface MainLayoutProps {
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const { signOut, isAdmin } = useAuth();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
+  const [open, setOpen] = useState(false);
 
   const menuItems = [
     { name: "แดชบอร์ด", icon: Home, path: "/dashboard" },
@@ -36,11 +47,18 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
     menuItems.push({ name: "แอดมิน", icon: Shield, path: "/admin" });
   }
 
+  const handleNavigation = (path: string) => {
+    navigate(path);
+    if (isMobile) {
+      setOpen(false);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="flex h-screen">
-        {/* Sidebar */}
-        <div className="hidden md:flex md:w-64 flex-col bg-white border-r shadow-sm">
+        {/* Desktop Sidebar */}
+        <div className="hidden md:flex md:w-64 flex-col bg-sidebar border-r shadow-sm">
           <div className="p-4 border-b">
             <h1 className="text-xl font-semibold text-theme-purple">Hug Mind Self</h1>
           </div>
@@ -50,22 +68,25 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                 <Button
                   key={index}
                   variant="ghost"
-                  className={`w-full justify-start text-left ${
+                  className={`w-full justify-start text-left text-sm ${
                     window.location.pathname === item.path
-                      ? "bg-gray-100"
+                      ? "bg-sidebar-accent"
                       : ""
                   }`}
-                  onClick={() => navigate(item.path)}
+                  onClick={() => handleNavigation(item.path)}
                 >
                   <item.icon className="mr-2 h-4 w-4" />
                   {item.name}
                 </Button>
               ))}
             </nav>
-            <div className="p-4 border-t">
+            <div className="p-4 border-t flex flex-col space-y-2">
+              <div className="flex justify-center mb-2">
+                <ThemeToggle />
+              </div>
               <Button
                 variant="ghost"
-                className="w-full justify-start text-left"
+                className="w-full justify-start text-left text-sm"
                 onClick={signOut}
               >
                 <LogOut className="mr-2 h-4 w-4" />
@@ -75,11 +96,57 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           </div>
         </div>
 
-        {/* Mobile header */}
-        <div className="md:hidden fixed top-0 left-0 right-0 bg-white border-b shadow-sm z-10">
-          <div className="flex items-center justify-between p-4">
-            <h1 className="text-xl font-semibold text-theme-purple">Hug Mind Self</h1>
-            {/* Mobile menu button (implement dropdown if needed) */}
+        {/* Mobile header with drawer */}
+        <div className="md:hidden fixed top-0 left-0 right-0 bg-sidebar border-b shadow-sm z-10 h-14">
+          <div className="flex items-center justify-between p-3">
+            <h1 className="text-lg font-semibold text-theme-purple">Hug Mind Self</h1>
+            <div className="flex items-center space-x-2">
+              <ThemeToggle />
+              <Sheet open={open} onOpenChange={setOpen}>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-8 w-8 p-0">
+                    <Menu className="h-5 w-5" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="left" className="bg-sidebar w-64 p-0">
+                  <div className="p-4 border-b flex justify-between items-center">
+                    <h2 className="text-lg font-semibold text-theme-purple">Hug Mind Self</h2>
+                    <Button variant="ghost" size="icon" onClick={() => setOpen(false)} className="p-1">
+                      <X className="h-5 w-5" />
+                    </Button>
+                  </div>
+                  <div className="flex flex-col justify-between h-[calc(100%-60px)]">
+                    <nav className="p-4 space-y-2">
+                      {menuItems.map((item, index) => (
+                        <Button
+                          key={index}
+                          variant="ghost"
+                          className={`w-full justify-start text-left text-sm ${
+                            window.location.pathname === item.path
+                              ? "bg-sidebar-accent"
+                              : ""
+                          }`}
+                          onClick={() => handleNavigation(item.path)}
+                        >
+                          <item.icon className="mr-2 h-4 w-4" />
+                          {item.name}
+                        </Button>
+                      ))}
+                    </nav>
+                    <div className="p-4 border-t">
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start text-left text-sm"
+                        onClick={signOut}
+                      >
+                        <LogOut className="mr-2 h-4 w-4" />
+                        ออกจากระบบ
+                      </Button>
+                    </div>
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
           </div>
         </div>
 
