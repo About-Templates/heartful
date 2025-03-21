@@ -98,13 +98,14 @@
 }
 
 .gradient-text {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-theme-purple to-theme-purple-dark;
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-theme-purple to-theme-purple-dark dark:from-theme-purple dark:to-theme-purple-light;
 }
 
 .card-hover {
-  @apply transition-all duration-300 hover:shadow-lg hover:shadow-theme-purple/10;
+  @apply transition-all duration-300 hover:shadow-lg hover:shadow-theme-purple/10 dark:hover:shadow-theme-purple/20;
 }
 
 .button-hover {
   @apply transition-all duration-300 hover:scale-105;
 }
+

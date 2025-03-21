@@ -48,12 +48,12 @@ const Dashboard = () => {
     <div className="min-h-screen flex flex-col">
       <Header />
       
-      <main className="flex-1 py-8 px-6 md:px-8 bg-gray-50">
+      <main className="flex-1 py-8 px-6 md:px-8 bg-background">
         <div className="max-w-7xl mx-auto">
           {/* Welcome section */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold mb-2">สวัสดี, {user?.name}! 👋</h1>
-            <p className="text-gray-600">
+            <p className="text-muted-foreground">
               ยินดีต้อนรับกลับมา นี่คือภาพรวมความก้าวหน้าของคุณในวันนี้
             </p>
           </div>
@@ -81,13 +81,13 @@ const Dashboard = () => {
               <CardContent>
                 <div className="space-y-4">
                   <Progress value={completionPercentage} className="h-2" />
-                  <div className="flex justify-between text-sm text-gray-600">
+                  <div className="flex justify-between text-sm text-muted-foreground">
                     <span>เสร็จแล้ว {completedTasks} จาก {totalTasks} งาน</span>
                     <span>{completionPercentage}%</span>
                   </div>
                   <Button 
                     variant="outline" 
-                    className="w-full mt-4 border-theme-purple text-theme-purple"
+                    className="w-full mt-4 border-theme-purple text-theme-purple dark:border-theme-purple dark:text-theme-purple"
                     onClick={() => navigate("/tasks")}
                   >
                     ดูงานทั้งหมด
@@ -113,7 +113,7 @@ const Dashboard = () => {
                         <div key={cohesion.id} className="flex justify-between items-center">
                           <div className="flex items-center">
                             <div className={`w-3 h-3 rounded-full bg-theme-${cohesion.color} mr-3`}></div>
-                            <span className="text-gray-700">{cohesion.name}</span>
+                            <span className="text-foreground">{cohesion.name}</span>
                           </div>
                           <span className="text-sm font-medium">
                             {getCurrentStreak(cohesion.id)} วันติดต่อกัน
@@ -122,7 +122,7 @@ const Dashboard = () => {
                       ))}
                       <Button 
                         variant="outline" 
-                        className="w-full mt-2 border-theme-purple text-theme-purple"
+                        className="w-full mt-2 border-theme-purple text-theme-purple dark:border-theme-purple dark:text-theme-purple"
                         onClick={() => navigate("/cohesion")}
                       >
                         ดูกิจกรรมทั้งหมด
@@ -131,10 +131,10 @@ const Dashboard = () => {
                     </div>
                   ) : (
                     <div className="text-center py-4">
-                      <p className="text-gray-500 mb-4">ยังไม่มีกิจกรรมที่ติดตาม</p>
+                      <p className="text-muted-foreground mb-4">ยังไม่มีกิจกรรมที่ติดตาม</p>
                       <Button 
                         variant="outline" 
-                        className="border-theme-purple text-theme-purple"
+                        className="border-theme-purple text-theme-purple dark:border-theme-purple dark:text-theme-purple"
                         onClick={() => navigate("/cohesion")}
                       >
                         <Plus className="mr-2 h-4 w-4" />
@@ -157,25 +157,25 @@ const Dashboard = () => {
               <CardContent>
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-gray-50 p-4 rounded-lg text-center">
+                    <div className="bg-secondary p-4 rounded-lg text-center">
                       <p className="text-3xl font-bold text-theme-purple">
                         {cohesions.length}
                       </p>
-                      <p className="text-sm text-gray-600">กิจกรรมทั้งหมด</p>
+                      <p className="text-sm text-muted-foreground">กิจกรรมทั้งหมด</p>
                     </div>
-                    <div className="bg-gray-50 p-4 rounded-lg text-center">
+                    <div className="bg-secondary p-4 rounded-lg text-center">
                       <p className="text-3xl font-bold text-theme-purple">
                         {cohesions.reduce((max, c) => {
                           const longest = getLongestStreak(c.id);
                           return longest > max ? longest : max;
                         }, 0)}
                       </p>
-                      <p className="text-sm text-gray-600">สถิติสูงสุด</p>
+                      <p className="text-sm text-muted-foreground">สถิติสูงสุด</p>
                     </div>
                   </div>
                   <Button 
                     variant="outline" 
-                    className="w-full mt-2 border-theme-purple text-theme-purple"
+                    className="w-full mt-2 border-theme-purple text-theme-purple dark:border-theme-purple dark:text-theme-purple"
                     onClick={() => navigate("/stats")}
                   >
                     ดูสถิติเพิ่มเติม
@@ -195,11 +195,11 @@ const Dashboard = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-8 text-muted-foreground">
                 <p className="mb-4">จะมีการแสดงปฏิทินกิจกรรมที่นี่</p>
                 <Button 
                   variant="outline" 
-                  className="border-theme-purple text-theme-purple"
+                  className="border-theme-purple text-theme-purple dark:border-theme-purple dark:text-theme-purple"
                 >
                   ดูปฏิทินเต็มหน้าจอ
                 </Button>
