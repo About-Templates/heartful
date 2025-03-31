@@ -92,9 +92,11 @@ export const AIChat = () => {
                   : "bg-muted"
               )}
             >
-              <ReactMarkdown className="prose dark:prose-invert prose-sm max-w-none">
-                {message.content}
-              </ReactMarkdown>
+              <div className="prose dark:prose-invert prose-sm max-w-none">
+                <ReactMarkdown>
+                  {message.content}
+                </ReactMarkdown>
+              </div>
             </div>
           ))
         )}
