@@ -54,6 +54,14 @@ export const ModelSelector = () => {
   const { selectedModel, setSelectedModel, apiKeys } = useAIChat();
   const [open, setOpen] = React.useState(false);
 
+  // Ensure apiKeys is defined before using it
+  const safeApiKeys = apiKeys || {};
+  
+  // Filter out models that don't have API keys
+  const availableModels = models.filter(model => 
+    Boolean(safeApiKeys[model.provider as keyof typeof safeApiKeys])
+  );
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -73,7 +81,7 @@ export const ModelSelector = () => {
           <CommandEmpty>ไม่พบโมเดล</CommandEmpty>
           <CommandGroup>
             {models.map((model) => {
-              const hasApiKey = Boolean(apiKeys[model.provider as keyof typeof apiKeys]);
+              const hasApiKey = Boolean(safeApiKeys[model.provider as keyof typeof safeApiKeys]);
               
               return (
                 <CommandItem
