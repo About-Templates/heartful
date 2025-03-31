@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import MobileNavigation from "@/components/MobileNavigation";
 import { 
   Home, 
   Calendar, 
@@ -152,10 +153,13 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 
         {/* Content */}
         <div className="flex-1 overflow-y-auto">
-          <div className="md:p-6 p-4 pt-16 md:pt-6">
+          <div className="md:p-6 p-4 pt-16 md:pt-6 pb-20 md:pb-6">
             {children}
           </div>
         </div>
+
+        {/* Mobile bottom navigation */}
+        <MobileNavigation />
       </div>
     </div>
   );
