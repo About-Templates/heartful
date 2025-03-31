@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { 
@@ -18,7 +18,6 @@ import {
   Menu,
   X
 } from "lucide-react";
-import { ThemeToggle } from "@/components/ThemeToggle";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -28,7 +27,6 @@ interface AdminLayoutProps {
 const AdminLayout: React.FC<AdminLayoutProps> = ({ children, title }) => {
   const { signOut } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const adminMenuItems = [
@@ -37,12 +35,10 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, title }) => {
     { name: "ตั้งค่า", icon: Settings, path: "/admin/settings" },
   ];
 
-  const isActive = (path: string) => {
-    return location.pathname === path;
-  };
+  const activePath = window.location.pathname;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gray-50">
       <div className="flex h-screen">
         {/* Sidebar */}
         <div className="hidden md:flex md:w-64 flex-col bg-slate-800 text-white">
@@ -58,8 +54,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, title }) => {
                 <Button
                   key={index}
                   variant="ghost"
-                  className={`w-full justify-start text-left hover:bg-slate-700 text-white ${
-                    isActive(item.path)
+                  className={`w-full justify-start text-left hover:bg-slate-700 ${
+                    activePath === item.path
                       ? "bg-slate-700"
                       : ""
                   }`}
@@ -73,7 +69,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, title }) => {
               <div className="pt-4 mt-4 border-t border-slate-700">
                 <Button
                   variant="ghost"
-                  className="w-full justify-start text-left hover:bg-slate-700 text-white"
+                  className="w-full justify-start text-left hover:bg-slate-700"
                   onClick={() => navigate("/dashboard")}
                 >
                   <Home className="mr-2 h-4 w-4" />
@@ -81,36 +77,15 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, title }) => {
                 </Button>
               </div>
             </nav>
-            <div className="p-4 border-t border-slate-700 flex flex-col space-y-2">
-              <div className="flex justify-center mb-2">
-                <ThemeToggle />
-              </div>
+            <div className="p-4 border-t border-slate-700">
               <Button
                 variant="ghost"
-                className="w-full justify-start text-left hover:bg-slate-700 text-white"
+                className="w-full justify-start text-left hover:bg-slate-700"
                 onClick={signOut}
               >
                 <LogOut className="mr-2 h-4 w-4" />
                 ออกจากระบบ
               </Button>
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile header */}
-        <div className="md:hidden fixed top-0 left-0 right-0 bg-slate-800 text-white z-10">
-          <div className="flex items-center justify-between p-4">
-            <div className="flex items-center space-x-2">
-              <Shield className="h-5 w-5 text-yellow-400" />
-              <h1 className="text-xl font-semibold">ระบบแอดมิน</h1>
-            </div>
-            <div className="flex items-center space-x-2">
-              <ThemeToggle />
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-white" onClick={() => setMobileMenuOpen(true)}>
-                  <Menu className="h-5 w-5" />
-                </Button>
-              </SheetTrigger>
             </div>
           </div>
         </div>
@@ -140,8 +115,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, title }) => {
                   <Button
                     key={index}
                     variant="ghost"
-                    className={`w-full justify-start text-left hover:bg-slate-700 text-white ${
-                      isActive(item.path)
+                    className={`w-full justify-start text-left hover:bg-slate-700 ${
+                      activePath === item.path
                         ? "bg-slate-700"
                         : ""
                     }`}
@@ -158,7 +133,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, title }) => {
                 <div className="pt-4 mt-4 border-t border-slate-700">
                   <Button
                     variant="ghost"
-                    className="w-full justify-start text-left hover:bg-slate-700 text-white"
+                    className="w-full justify-start text-left hover:bg-slate-700"
                     onClick={() => {
                       navigate("/dashboard");
                       setMobileMenuOpen(false);
@@ -172,7 +147,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, title }) => {
               <div className="p-4 border-t border-slate-700">
                 <Button
                   variant="ghost"
-                  className="w-full justify-start text-left hover:bg-slate-700 text-white"
+                  className="w-full justify-start text-left hover:bg-slate-700"
                   onClick={signOut}
                 >
                   <LogOut className="mr-2 h-4 w-4" />
@@ -183,11 +158,26 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, title }) => {
           </SheetContent>
         </Sheet>
 
+        {/* Mobile header */}
+        <div className="md:hidden fixed top-0 left-0 right-0 bg-slate-800 text-white z-10">
+          <div className="flex items-center justify-between p-4">
+            <div className="flex items-center space-x-2">
+              <Shield className="h-5 w-5 text-yellow-400" />
+              <h1 className="text-xl font-semibold">ระบบแอดมิน</h1>
+            </div>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="text-white" onClick={() => setMobileMenuOpen(true)}>
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+          </div>
+        </div>
+
         {/* Content */}
         <div className="flex-1 overflow-y-auto">
-          <div className="p-6 pt-16 md:pt-6 pb-20 md:pb-6">
+          <div className="p-6 pt-16 md:pt-6">
             <div className="flex justify-between items-center mb-6">
-              <h1 className="text-2xl font-bold">{title || location.pathname.split('/').pop()?.replace(/^\w/, c => c.toUpperCase())}</h1>
+              <h1 className="text-2xl font-bold">{title || activePath.split('/').pop()?.replace(/^\w/, c => c.toUpperCase())}</h1>
               <Button 
                 variant="outline" 
                 onClick={() => navigate('/dashboard')}
@@ -198,37 +188,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, title }) => {
               </Button>
             </div>
             {children}
-          </div>
-        </div>
-        
-        {/* Bottom mobile navigation for admin */}
-        <div className="md:hidden fixed bottom-0 left-0 right-0 bg-slate-800 border-t border-slate-700 z-40">
-          <div className="flex justify-around items-center h-16">
-            {adminMenuItems.map((item) => (
-              <Button
-                key={item.path}
-                variant="ghost"
-                size="sm"
-                className={`flex flex-col items-center justify-center h-full px-1 rounded-none text-white ${
-                  isActive(item.path)
-                    ? "bg-slate-700"
-                    : ""
-                }`}
-                onClick={() => navigate(item.path)}
-              >
-                <item.icon className="h-5 w-5 mb-1" />
-                <span className="text-xs">{item.name}</span>
-              </Button>
-            ))}
-            <Button
-              variant="ghost"
-              size="sm"
-              className="flex flex-col items-center justify-center h-full px-1 rounded-none text-white"
-              onClick={() => navigate('/dashboard')}
-            >
-              <Home className="h-5 w-5 mb-1" />
-              <span className="text-xs">หน้าหลัก</span>
-            </Button>
           </div>
         </div>
       </div>
