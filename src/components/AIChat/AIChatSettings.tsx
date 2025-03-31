@@ -12,7 +12,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { EyeIcon, EyeOffIcon, Save } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 interface AIChatSettingsProps {
   isOpen: boolean;
@@ -66,8 +67,10 @@ export const AIChatSettings = ({ isOpen, onClose }: AIChatSettingsProps) => {
   React.useEffect(() => {
     // Initialize temp keys with existing API keys
     const keys: Record<string, string> = {};
+    const safeApiKeys = apiKeys || {};
+    
     for (const provider of apiProviders) {
-      keys[provider.id] = apiKeys[provider.id as keyof typeof apiKeys] || "";
+      keys[provider.id] = safeApiKeys[provider.id as keyof typeof safeApiKeys] || "";
     }
     setTempKeys(keys);
   }, [apiKeys, isOpen]);

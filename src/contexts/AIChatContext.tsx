@@ -67,6 +67,13 @@ export const AIChatProvider = ({ children }: AIChatProviderProps) => {
       ...prev,
       [provider]: key
     }));
+    
+    // Show confirmation toast
+    toast({
+      title: "API Key บันทึกแล้ว",
+      description: `คีย์ API สำหรับ ${provider} ได้รับการบันทึกเรียบร้อยแล้ว`,
+      variant: "default"
+    });
   };
 
   const toggleChat = () => {
@@ -94,7 +101,9 @@ export const AIChatProvider = ({ children }: AIChatProviderProps) => {
     try {
       // Check if API key exists for the selected model
       const requiredProvider = getProviderForModel(selectedModel);
-      if (!apiKeys[requiredProvider]) {
+      const safeApiKeys = apiKeys || {};
+      
+      if (!safeApiKeys[requiredProvider]) {
         throw new Error(`API key for ${requiredProvider} is required for ${selectedModel}`);
       }
       
