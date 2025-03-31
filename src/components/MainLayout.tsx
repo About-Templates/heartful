@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { AIChat } from "@/components/AIChat";
 import { 
   Home, 
   Calendar, 
@@ -155,6 +156,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           <div className="md:p-6 p-4 pt-16 md:pt-6">
             {children}
           </div>
+          <AIChat />
         </div>
       </div>
     </div>

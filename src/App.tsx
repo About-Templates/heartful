@@ -20,6 +20,7 @@ import ResetPassword from "./pages/ResetPassword";
 import { AuthProvider } from "./contexts/AuthContext";
 import { CohesionProvider } from "./contexts/CohesionContext";
 import { TasksProvider } from "./contexts/TasksContext";
+import { AIChatProvider } from "./contexts/AIChatContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminActivity from "./pages/admin/AdminActivity";
@@ -37,33 +38,35 @@ const App = () => (
           <AuthProvider>
             <CohesionProvider>
               <TasksProvider>
-                <Toaster />
-                <Sonner />
-                <Routes>
-                  {/* Public routes */}
-                  <Route path="/" element={<Index />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/signup" element={<SignUp />} />
-                  <Route path="/forgot-password" element={<ForgotPassword />} />
-                  <Route path="/reset-password" element={<ResetPassword />} />
-                  
-                  {/* Protected routes */}
-                  <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-                  <Route path="/cohesion" element={<ProtectedRoute><Cohesion /></ProtectedRoute>} />
-                  <Route path="/cohesion/:id" element={<ProtectedRoute><CohesionDetail /></ProtectedRoute>} />
-                  <Route path="/tasks" element={<ProtectedRoute><Tasks /></ProtectedRoute>} />
-                  <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-                  <Route path="/stats" element={<ProtectedRoute><Stats /></ProtectedRoute>} />
-                  <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-                  
-                  {/* Admin routes */}
-                  <Route path="/admin/users" element={<AdminRoute><AdminUsers /></AdminRoute>} />
-                  <Route path="/admin/activity" element={<AdminRoute><AdminActivity /></AdminRoute>} />
-                  <Route path="/admin/settings" element={<AdminRoute><AdminSettings /></AdminRoute>} />
-                  
-                  {/* 404 route */}
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
+                <AIChatProvider>
+                  <Toaster />
+                  <Sonner />
+                  <Routes>
+                    {/* Public routes */}
+                    <Route path="/" element={<Index />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/signup" element={<SignUp />} />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                    <Route path="/reset-password" element={<ResetPassword />} />
+                    
+                    {/* Protected routes */}
+                    <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                    <Route path="/cohesion" element={<ProtectedRoute><Cohesion /></ProtectedRoute>} />
+                    <Route path="/cohesion/:id" element={<ProtectedRoute><CohesionDetail /></ProtectedRoute>} />
+                    <Route path="/tasks" element={<ProtectedRoute><Tasks /></ProtectedRoute>} />
+                    <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+                    <Route path="/stats" element={<ProtectedRoute><Stats /></ProtectedRoute>} />
+                    <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+                    
+                    {/* Admin routes */}
+                    <Route path="/admin/users" element={<AdminRoute><AdminUsers /></AdminRoute>} />
+                    <Route path="/admin/activity" element={<AdminRoute><AdminActivity /></AdminRoute>} />
+                    <Route path="/admin/settings" element={<AdminRoute><AdminSettings /></AdminRoute>} />
+                    
+                    {/* 404 route */}
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </AIChatProvider>
               </TasksProvider>
             </CohesionProvider>
           </AuthProvider>
