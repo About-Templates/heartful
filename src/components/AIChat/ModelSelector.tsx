@@ -57,11 +57,6 @@ export const ModelSelector = () => {
   // Ensure apiKeys is defined before using it
   const safeApiKeys = apiKeys || {};
   
-  // Filter out models that don't have API keys
-  const availableModels = models.filter(model => 
-    Boolean(safeApiKeys[model.provider as keyof typeof safeApiKeys])
-  );
-
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
